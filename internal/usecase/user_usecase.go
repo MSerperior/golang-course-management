@@ -56,7 +56,7 @@ func (c *UserUseCase) Verify(ctx context.Context, request *model.VerifyUserReque
 		return nil, fiber.ErrInternalServerError
 	}
 
-	return &model.Auth{ID: user.ID}, nil
+	return &model.Auth{ID: user.ID.String()}, nil
 }
 
 func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserRequest) (*model.UserResponse, error) {
@@ -86,8 +86,14 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.ErrInternalServerError
 	}
 
+	userID, err := uuid.Parse(request.ID)
+	if err != nil {
+		c.Log.Warnf("Invalid user ID format : %+v", err)
+		return nil, fiber.ErrBadRequest
+	}
+
 	user := &entity.User{
-		ID:       request.ID,
+		Entity:   entity.Entity{ID: &userID},
 		Password: string(password),
 		Name:     request.Name,
 	}

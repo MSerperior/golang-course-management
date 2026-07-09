@@ -7,7 +7,7 @@ import (
 
 func UserToResponse(user *entity.User) *model.UserResponse {
 	return &model.UserResponse{
-		ID:        user.ID,
+		ID:        user.ID.String(),
 		Name:      user.Name,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
@@ -22,9 +22,7 @@ func UserToTokenResponse(user *entity.User) *model.UserResponse {
 
 func UserToEvent(user *entity.User) *model.UserEvent {
 	return &model.UserEvent{
-		ID:        user.ID,
-		Name:      user.Name,
-		CreatedAt: user.CreatedAt,
+		ID:        user.ID.String(),
 		UpdatedAt: user.UpdatedAt,
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"golang-clean-architecture/db/migrations"
 	"golang-clean-architecture/internal/config"
 )
 
@@ -12,6 +13,8 @@ func main() {
 	validate := config.NewValidator(viperConfig)
 	app := config.NewFiber(viperConfig)
 	producer := config.NewKafkaProducer(viperConfig, log)
+
+	migrations.Migrate(db)
 
 	config.Bootstrap(&config.BootstrapConfig{
 		DB:       db,

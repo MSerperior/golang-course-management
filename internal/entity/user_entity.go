@@ -1,14 +1,21 @@
 package entity
 
-// User is a struct that represents a user entity
+// User represents a user account (UUID primary key)
 type User struct {
-	ID        string    `gorm:"column:id;primaryKey"`
-	Password  string    `gorm:"column:password"`
-	Name      string    `gorm:"column:name"`
-	Token     string    `gorm:"column:token"`
-	CreatedAt int64     `gorm:"column:created_at;autoCreateTime:milli"`
-	UpdatedAt int64     `gorm:"column:updated_at;autoCreateTime:milli;autoUpdateTime:milli"`
-	Contacts  []Contact `gorm:"foreignKey:user_id;references:id"`
+	Entity
+	Name      string `gorm:"column:name"`
+	Email     string `gorm:"column:email;unique"`
+	Password  string `gorm:"column:password"`
+	AvatarURL string `gorm:"column:avatar_url"`
+	IsActive  bool   `gorm:"column:is_active"`
+	Token     string `gorm:"column:token"`
+
+	// Relations
+	UserRoles    []UserRole    `gorm:"foreignKey:user_id;references:id"`
+	Courses      []Course      `gorm:"foreignKey:instructor_id;references:id"`
+	Enrollments  []Enrollment  `gorm:"foreignKey:student_id;references:id"`
+	Transactions []Transaction `gorm:"foreignKey:user_id;references:id"`
+	Reviews      []Review      `gorm:"foreignKey:student_id;references:id"`
 }
 
 func (u *User) TableName() string {
