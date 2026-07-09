@@ -52,8 +52,9 @@ func (c *AddressUseCase) Create(ctx context.Context, request *model.CreateAddres
 		return nil, fiber.ErrNotFound
 	}
 
+	newID := uuid.New()
 	address := &entity.Address{
-		ID:         uuid.NewString(),
+		Entity:     entity.Entity{ID: &newID},
 		ContactId:  contact.ID,
 		Street:     request.Street,
 		City:       request.City,
@@ -102,7 +103,7 @@ func (c *AddressUseCase) Update(ctx context.Context, request *model.UpdateAddres
 	}
 
 	address := new(entity.Address)
-	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, contact.ID); err != nil {
+	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, contact.ID.String()); err != nil {
 		c.Log.WithError(err).Error("failed to find address")
 		return nil, fiber.ErrNotFound
 	}
@@ -148,7 +149,7 @@ func (c *AddressUseCase) Get(ctx context.Context, request *model.GetAddressReque
 	}
 
 	address := new(entity.Address)
-	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, request.ContactId); err != nil {
+	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, contact.ID.String()); err != nil {
 		c.Log.WithError(err).Error("failed to find address")
 		return nil, fiber.ErrNotFound
 	}
@@ -172,7 +173,7 @@ func (c *AddressUseCase) Delete(ctx context.Context, request *model.DeleteAddres
 	}
 
 	address := new(entity.Address)
-	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, request.ContactId); err != nil {
+	if err := c.AddressRepository.FindByIdAndContactId(tx, address, request.ID, contact.ID.String()); err != nil {
 		c.Log.WithError(err).Error("failed to find address")
 		return fiber.ErrNotFound
 	}
@@ -200,7 +201,7 @@ func (c *AddressUseCase) List(ctx context.Context, request *model.ListAddressReq
 		return nil, fiber.ErrNotFound
 	}
 
-	addresses, err := c.AddressRepository.FindAllByContactId(tx, contact.ID)
+	addresses, err := c.AddressRepository.FindAllByContactId(tx, contact.ID.String())
 	if err != nil {
 		c.Log.WithError(err).Error("failed to find addresses")
 		return nil, fiber.ErrInternalServerError

@@ -7,7 +7,7 @@ import (
 
 func ContactToResponse(contact *entity.Contact) *model.ContactResponse {
 	return &model.ContactResponse{
-		ID:        contact.ID,
+		ID:        contact.ID.String(),
 		FirstName: contact.FirstName,
 		LastName:  contact.LastName,
 		Email:     contact.Email,
@@ -19,8 +19,8 @@ func ContactToResponse(contact *entity.Contact) *model.ContactResponse {
 
 func ContactToEvent(contact *entity.Contact) *model.ContactEvent {
 	return &model.ContactEvent{
-		ID:        contact.ID,
-		UserID:    contact.UserId,
+		ID:        contact.ID.String(),
+		UserID:    contact.UserId.String(),
 		FirstName: contact.FirstName,
 		LastName:  contact.LastName,
 		Email:     contact.Email,

@@ -43,13 +43,15 @@ func (c *ContactUseCase) Create(ctx context.Context, request *model.CreateContac
 		return nil, fiber.ErrBadRequest
 	}
 
+	newID := uuid.New()
+	userID := uuid.MustParse(request.UserId)
 	contact := &entity.Contact{
-		ID:        uuid.New().String(),
+		Entity:    entity.Entity{ID: &newID},
 		FirstName: request.FirstName,
 		LastName:  request.LastName,
 		Email:     request.Email,
 		Phone:     request.Phone,
-		UserId:    request.UserId,
+		UserId:    &userID,
 	}
 
 	if err := c.ContactRepository.Create(tx, contact); err != nil {
