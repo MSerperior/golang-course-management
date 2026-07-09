@@ -48,8 +48,8 @@ type DeleteCourseRequest struct {
 
 type ListCourseRequest struct {
 	Title        string `json:"title,omitempty" validate:"max=255"`
-	CategoryId   string `json:"category_id,omitempty" validate:"max=100,uuid"`
-	InstructorId string `json:"instructor_id,omitempty" validate:"max=100,uuid"`
+	CategoryId   string `json:"category_id,omitempty" validate:"omitempty,max=100,uuid"`
+	InstructorId string `json:"instructor_id,omitempty" validate:"omitempty,max=100,uuid"`
 	Status       string `json:"status,omitempty" validate:"max=50"`
 	Page         int    `json:"page,omitempty" validate:"min=1"`
 	Size         int    `json:"size,omitempty" validate:"min=1,max=100"`
