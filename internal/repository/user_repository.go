@@ -21,3 +21,7 @@ func NewUserRepository(log *logrus.Logger) *UserRepository {
 func (r *UserRepository) FindByToken(db *gorm.DB, user *entity.User, token string) error {
 	return db.Where("token = ?", token).First(user).Error
 }
+
+func (r *Repository[T]) FindByEmail(db *gorm.DB, entity *T, email string) error {
+	return db.Where("email = ?", email).Take(entity).Error
+}

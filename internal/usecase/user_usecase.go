@@ -96,6 +96,7 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		Entity:   entity.Entity{ID: &userID},
 		Password: string(password),
 		Name:     request.Name,
+		Email:    request.Email,
 	}
 
 	if err := c.UserRepository.Create(tx, user); err != nil {
@@ -132,7 +133,7 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 	}
 
 	user := new(entity.User)
-	if err := c.UserRepository.FindById(tx, user, request.ID); err != nil {
+	if err := c.UserRepository.FindByEmail(tx, user, request.Email); err != nil {
 		c.Log.Warnf("Failed find user by id : %+v", err)
 		return nil, fiber.ErrUnauthorized
 	}
