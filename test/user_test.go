@@ -10,14 +10,20 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"
 )
 
+var testUserID = uuid.New().String()
+
+const testUserEmail = "khannedy@example.com"
+
 func TestRegister(t *testing.T) {
 	ClearAll()
 	requestBody := model.RegisterUserRequest{
-		ID:       "khannedy",
+		ID:       testUserID,
+		Email:    testUserEmail,
 		Password: "rahasia",
 		Name:     "Eko Khannedy",
 	}
@@ -80,7 +86,8 @@ func TestRegisterDuplicate(t *testing.T) {
 	TestRegister(t) // register success
 
 	requestBody := model.RegisterUserRequest{
-		ID:       "khannedy",
+		ID:       testUserID,
+		Email:    testUserEmail,
 		Password: "rahasia",
 		Name:     "Eko Khannedy",
 	}
@@ -110,7 +117,7 @@ func TestLogin(t *testing.T) {
 	TestRegister(t) // register success
 
 	requestBody := model.LoginUserRequest{
-		ID:       "khannedy",
+		Email:    testUserEmail,
 		Password: "rahasia",
 	}
 
@@ -135,7 +142,7 @@ func TestLogin(t *testing.T) {
 	assert.NotNil(t, responseBody.Data.Token)
 
 	user := new(entity.User)
-	err = db.Where("id = ?", requestBody.ID).First(user).Error
+	err = db.Where("email = ?", testUserEmail).First(user).Error
 	assert.Nil(t, err)
 	assert.Equal(t, user.Token, responseBody.Data.Token)
 }
@@ -145,7 +152,7 @@ func TestLoginWrongUsername(t *testing.T) {
 	TestRegister(t) // register success
 
 	requestBody := model.LoginUserRequest{
-		ID:       "wrong",
+		Email:    "wrong@example.com",
 		Password: "rahasia",
 	}
 
@@ -175,7 +182,7 @@ func TestLoginWrongPassword(t *testing.T) {
 	TestRegister(t) // register success
 
 	requestBody := model.LoginUserRequest{
-		ID:       "khannedy",
+		Email:    testUserEmail,
 		Password: "wrong",
 	}
 
@@ -205,7 +212,7 @@ func TestLogout(t *testing.T) {
 	TestLogin(t) // login success
 
 	user := new(entity.User)
-	err := db.Where("id = ?", "khannedy").First(user).Error
+	err := db.Where("email = ?", testUserEmail).First(user).Error
 	assert.Nil(t, err)
 
 	request := httptest.NewRequest(http.MethodDelete, "/api/users", nil)
@@ -255,7 +262,7 @@ func TestGetCurrentUser(t *testing.T) {
 	TestLogin(t) // login success
 
 	user := new(entity.User)
-	err := db.Where("id = ?", "khannedy").First(user).Error
+	err := db.Where("email = ?", testUserEmail).First(user).Error
 	assert.Nil(t, err)
 
 	request := httptest.NewRequest(http.MethodGet, "/api/users/_current", nil)
@@ -274,7 +281,7 @@ func TestGetCurrentUser(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, http.StatusOK, response.StatusCode)
-	assert.Equal(t, user.ID, responseBody.Data.ID)
+	assert.Equal(t, user.ID.String(), responseBody.Data.ID)
 	assert.Equal(t, user.Name, responseBody.Data.Name)
 	assert.Equal(t, user.CreatedAt, responseBody.Data.CreatedAt)
 	assert.Equal(t, user.UpdatedAt, responseBody.Data.UpdatedAt)
@@ -308,7 +315,7 @@ func TestUpdateUserName(t *testing.T) {
 	TestLogin(t) // login success
 
 	user := new(entity.User)
-	err := db.Where("id = ?", "khannedy").First(user).Error
+	err := db.Where("email = ?", testUserEmail).First(user).Error
 	assert.Nil(t, err)
 
 	requestBody := model.UpdateUserRequest{
@@ -334,7 +341,7 @@ func TestUpdateUserName(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, http.StatusOK, response.StatusCode)
-	assert.Equal(t, user.ID, responseBody.Data.ID)
+	assert.Equal(t, user.ID.String(), responseBody.Data.ID)
 	assert.Equal(t, requestBody.Name, responseBody.Data.Name)
 	assert.NotNil(t, responseBody.Data.CreatedAt)
 	assert.NotNil(t, responseBody.Data.UpdatedAt)
@@ -345,7 +352,7 @@ func TestUpdateUserPassword(t *testing.T) {
 	TestLogin(t) // login success
 
 	user := new(entity.User)
-	err := db.Where("id = ?", "khannedy").First(user).Error
+	err := db.Where("email = ?", testUserEmail).First(user).Error
 	assert.Nil(t, err)
 
 	requestBody := model.UpdateUserRequest{
@@ -371,12 +378,12 @@ func TestUpdateUserPassword(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, http.StatusOK, response.StatusCode)
-	assert.Equal(t, user.ID, responseBody.Data.ID)
+	assert.Equal(t, user.ID.String(), responseBody.Data.ID)
 	assert.NotNil(t, responseBody.Data.CreatedAt)
 	assert.NotNil(t, responseBody.Data.UpdatedAt)
 
 	user = new(entity.User)
-	err = db.Where("id = ?", "khannedy").First(user).Error
+	err = db.Where("email = ?", testUserEmail).First(user).Error
 	assert.Nil(t, err)
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(requestBody.Password))

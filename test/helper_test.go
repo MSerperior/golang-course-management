@@ -38,13 +38,14 @@ func ClearAddresses() {
 
 func CreateContacts(user *entity.User, total int) {
 	for i := 0; i < total; i++ {
+		newID := uuid.New()
 		contact := &entity.Contact{
-			ID:        uuid.NewString(),
+			Entity:    entity.Entity{ID: &newID},
 			FirstName: "Contact",
 			LastName:  strconv.Itoa(i),
 			Email:     "contact" + strconv.Itoa(i) + "@example.com",
 			Phone:     "08000000" + strconv.Itoa(i),
-			UserId:    user.ID.String(),
+			UserId:    user.ID,
 		}
 		err := db.Create(contact).Error
 		if err != nil {
@@ -55,8 +56,9 @@ func CreateContacts(user *entity.User, total int) {
 
 func CreateAddresses(t *testing.T, contact *entity.Contact, total int) {
 	for i := 0; i < total; i++ {
+		newID := uuid.New()
 		address := &entity.Address{
-			ID:         uuid.NewString(),
+			Entity:     entity.Entity{ID: &newID},
 			ContactId:  contact.ID,
 			Street:     "Jalan Belum Jadi",
 			City:       "Jakarta",
@@ -78,7 +80,7 @@ func GetFirstUser(t *testing.T) *entity.User {
 
 func GetFirstContact(t *testing.T, user *entity.User) *entity.Contact {
 	contact := new(entity.Contact)
-	err := db.Where("user_id = ?", user.ID.String()).First(contact).Error
+	err := db.Where("user_id = ?", user.ID).First(contact).Error
 	assert.Nil(t, err)
 	return contact
 }
