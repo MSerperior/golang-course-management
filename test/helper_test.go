@@ -44,7 +44,7 @@ func CreateContacts(user *entity.User, total int) {
 			LastName:  strconv.Itoa(i),
 			Email:     "contact" + strconv.Itoa(i) + "@example.com",
 			Phone:     "08000000" + strconv.Itoa(i),
-			UserId:    user.ID,
+			UserId:    user.ID.String(),
 		}
 		err := db.Create(contact).Error
 		if err != nil {
@@ -78,7 +78,7 @@ func GetFirstUser(t *testing.T) *entity.User {
 
 func GetFirstContact(t *testing.T, user *entity.User) *entity.Contact {
 	contact := new(entity.Contact)
-	err := db.Where("user_id = ?", user.ID).First(contact).Error
+	err := db.Where("user_id = ?", user.ID.String()).First(contact).Error
 	assert.Nil(t, err)
 	return contact
 }

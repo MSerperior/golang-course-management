@@ -1,6 +1,7 @@
 package config
 
 import (
+	"golang-clean-architecture/db/migrations"
 	"golang-clean-architecture/internal/delivery/http"
 	"golang-clean-architecture/internal/delivery/http/middleware"
 	"golang-clean-architecture/internal/delivery/http/route"
@@ -26,10 +27,13 @@ type BootstrapConfig struct {
 }
 
 func Bootstrap(config *BootstrapConfig) {
+	migrations.Migrate(config.DB)
+
 	// setup repositories
 	userRepository := repository.NewUserRepository(config.Log)
 	contactRepository := repository.NewContactRepository(config.Log)
 	addressRepository := repository.NewAddressRepository(config.Log)
+	categoryRepository := repository.NewCategoryRepository(config.Log)
 
 	// setup producer
 	var userProducer *messaging.UserProducer
@@ -46,21 +50,24 @@ func Bootstrap(config *BootstrapConfig) {
 	userUseCase := usecase.NewUserUseCase(config.DB, config.Log, config.Validate, userRepository, userProducer)
 	contactUseCase := usecase.NewContactUseCase(config.DB, config.Log, config.Validate, contactRepository, contactProducer)
 	addressUseCase := usecase.NewAddressUseCase(config.DB, config.Log, config.Validate, contactRepository, addressRepository, addressProducer)
+	categoryUseCase := usecase.NewCategoryUseCase(config.DB, config.Log, config.Validate, categoryRepository)
 
 	// setup controller
 	userController := http.NewUserController(userUseCase, config.Log)
 	contactController := http.NewContactController(contactUseCase, config.Log)
 	addressController := http.NewAddressController(addressUseCase, config.Log)
+	categoryController := http.NewCategoryController(categoryUseCase, config.Log)
 
 	// setup middleware
 	authMiddleware := middleware.NewAuth(userUseCase)
 
 	routeConfig := route.RouteConfig{
-		App:               config.App,
-		UserController:    userController,
-		ContactController: contactController,
-		AddressController: addressController,
-		AuthMiddleware:    authMiddleware,
+		App:                config.App,
+		UserController:     userController,
+		ContactController:  contactController,
+		AddressController:  addressController,
+		CategoryController: categoryController,
+		AuthMiddleware:     authMiddleware,
 	}
 	routeConfig.Setup()
 }
