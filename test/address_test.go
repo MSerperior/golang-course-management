@@ -28,7 +28,7 @@ func TestCreateAddress(t *testing.T) {
 	bodyJson, err := json.Marshal(requestBody)
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodPost, "/api/contacts/"+contact.ID+"/addresses", strings.NewReader(string(bodyJson)))
+	request := httptest.NewRequest(http.MethodPost, "/api/contacts/"+contact.ID.String()+"/addresses", strings.NewReader(string(bodyJson)))
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
@@ -70,7 +70,7 @@ func TestCreateAddressFailed(t *testing.T) {
 	bodyJson, err := json.Marshal(requestBody)
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodPost, "/api/contacts/"+contact.ID+"/addresses", strings.NewReader(string(bodyJson)))
+	request := httptest.NewRequest(http.MethodPost, "/api/contacts/"+contact.ID.String()+"/addresses", strings.NewReader(string(bodyJson)))
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
@@ -96,7 +96,7 @@ func TestListAddresses(t *testing.T) {
 
 	CreateAddresses(t, contact, 5)
 
-	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID+"/addresses", nil)
+	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID.String()+"/addresses", nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 
@@ -146,7 +146,7 @@ func TestGetAddress(t *testing.T) {
 	contact := GetFirstContact(t, user)
 	address := GetFirstAddress(t, contact)
 
-	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID+"/addresses/"+address.ID, nil)
+	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID.String()+"/addresses/"+address.ID.String(), nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 
@@ -161,7 +161,7 @@ func TestGetAddress(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, http.StatusOK, response.StatusCode)
-	assert.Equal(t, address.ID, responseBody.Data.ID)
+	assert.Equal(t, address.ID.String(), responseBody.Data.ID)
 	assert.Equal(t, address.Street, responseBody.Data.Street)
 	assert.Equal(t, address.City, responseBody.Data.City)
 	assert.Equal(t, address.Province, responseBody.Data.Province)
@@ -177,7 +177,7 @@ func TestGetAddressFailed(t *testing.T) {
 	user := GetFirstUser(t)
 	contact := GetFirstContact(t, user)
 
-	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID+"/addresses/"+"wrong", nil)
+	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID.String()+"/addresses/"+"wrong", nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 
@@ -211,7 +211,7 @@ func TestUpdateAddress(t *testing.T) {
 	bodyJson, err := json.Marshal(requestBody)
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID+"/addresses/"+address.ID, strings.NewReader(string(bodyJson)))
+	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID.String()+"/addresses/"+address.ID.String(), strings.NewReader(string(bodyJson)))
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
@@ -254,7 +254,7 @@ func TestUpdateAddressFailed(t *testing.T) {
 	bodyJson, err := json.Marshal(requestBody)
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID+"/addresses/"+address.ID, strings.NewReader(string(bodyJson)))
+	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID.String()+"/addresses/"+address.ID.String(), strings.NewReader(string(bodyJson)))
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
@@ -279,7 +279,7 @@ func TestDeleteAddress(t *testing.T) {
 	contact := GetFirstContact(t, user)
 	address := GetFirstAddress(t, contact)
 
-	request := httptest.NewRequest(http.MethodDelete, "/api/contacts/"+contact.ID+"/addresses/"+address.ID, nil)
+	request := httptest.NewRequest(http.MethodDelete, "/api/contacts/"+contact.ID.String()+"/addresses/"+address.ID.String(), nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 
@@ -303,7 +303,7 @@ func TestDeleteAddressFailed(t *testing.T) {
 	user := GetFirstUser(t)
 	contact := GetFirstContact(t, user)
 
-	request := httptest.NewRequest(http.MethodDelete, "/api/contacts/"+contact.ID+"/addresses/"+"wrong", nil)
+	request := httptest.NewRequest(http.MethodDelete, "/api/contacts/"+contact.ID.String()+"/addresses/"+"wrong", nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 

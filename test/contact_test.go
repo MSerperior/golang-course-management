@@ -101,7 +101,7 @@ func TestGetConnect(t *testing.T) {
 	err = db.Where("user_id = ?", user.ID).First(contact).Error
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID, nil)
+	request := httptest.NewRequest(http.MethodGet, "/api/contacts/"+contact.ID.String(), nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 
@@ -116,7 +116,7 @@ func TestGetConnect(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, http.StatusOK, response.StatusCode)
-	assert.Equal(t, contact.ID, responseBody.Data.ID)
+	assert.Equal(t, contact.ID.String(), responseBody.Data.ID)
 	assert.Equal(t, contact.FirstName, responseBody.Data.FirstName)
 	assert.Equal(t, contact.LastName, responseBody.Data.LastName)
 	assert.Equal(t, contact.Email, responseBody.Data.Email)
@@ -169,7 +169,7 @@ func TestUpdateContact(t *testing.T) {
 	bodyJson, err := json.Marshal(requestBody)
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID, strings.NewReader(string(bodyJson)))
+	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID.String(), strings.NewReader(string(bodyJson)))
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
@@ -214,7 +214,7 @@ func TestUpdateContactFailed(t *testing.T) {
 	bodyJson, err := json.Marshal(requestBody)
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID, strings.NewReader(string(bodyJson)))
+	request := httptest.NewRequest(http.MethodPut, "/api/contacts/"+contact.ID.String(), strings.NewReader(string(bodyJson)))
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
@@ -277,7 +277,7 @@ func TestDeleteContact(t *testing.T) {
 	err = db.Where("user_id = ?", user.ID).First(contact).Error
 	assert.Nil(t, err)
 
-	request := httptest.NewRequest(http.MethodDelete, "/api/contacts/"+contact.ID, nil)
+	request := httptest.NewRequest(http.MethodDelete, "/api/contacts/"+contact.ID.String(), nil)
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)
 
