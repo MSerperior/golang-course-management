@@ -69,15 +69,15 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.ErrBadRequest
 	}
 
-	total, err := c.UserRepository.CountById(tx, request.ID)
-	if err != nil {
-		c.Log.Warnf("Failed count user from database : %+v", err)
+	check_user, err := c.UserRepository.FindByEmail(tx, request.Email)
+	if err != nil && err != gorm.ErrRecordNotFound {
+		c.Log.Warnf("Failed check user from database : %+v", err)
 		return nil, fiber.ErrInternalServerError
 	}
 
-	if total > 0 {
-		c.Log.Warnf("User already exists : %+v", err)
-		return nil, fiber.ErrConflict
+	if check_user != nil {
+		c.Log.Warnf("Email already registered : %+v", request.Email)
+		return nil, fiber.ErrBadRequest
 	}
 
 	password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
@@ -86,7 +86,7 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.ErrInternalServerError
 	}
 
-	userID, err := uuid.Parse(request.ID)
+	userID, err := uuid.NewRandom()
 	if err != nil {
 		c.Log.Warnf("Invalid user ID format : %+v", err)
 		return nil, fiber.ErrBadRequest
@@ -94,9 +94,10 @@ func (c *UserUseCase) Create(ctx context.Context, request *model.RegisterUserReq
 
 	user := &entity.User{
 		Entity:   entity.Entity{ID: &userID},
-		Password: string(password),
 		Name:     request.Name,
 		Email:    request.Email,
+		Password: string(password),
+		Token:    uuid.New().String(),
 	}
 
 	if err := c.UserRepository.Create(tx, user); err != nil {
@@ -132,8 +133,8 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 		return nil, fiber.ErrBadRequest
 	}
 
-	user := new(entity.User)
-	if err := c.UserRepository.FindByEmail(tx, user, request.Email); err != nil {
+	user, err := c.UserRepository.FindByEmail(tx, request.Email)
+	if err != nil {
 		c.Log.Warnf("Failed find user by id : %+v", err)
 		return nil, fiber.ErrUnauthorized
 	}
