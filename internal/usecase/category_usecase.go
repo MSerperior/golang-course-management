@@ -47,8 +47,8 @@ func (c *CategoryUseCase) Create(ctx context.Context, request *model.CreateCateg
 		Slug:   request.Slug,
 	}
 
-	if request.ParentId != "" {
-		parentID, err := uuid.Parse(request.ParentId)
+	if request.ParentId != nil && *request.ParentId != "" {
+		parentID, err := uuid.Parse(*request.ParentId)
 		if err != nil {
 			c.Log.WithError(err).Warn("invalid parent category id")
 			return nil, fiber.ErrBadRequest
@@ -90,8 +90,8 @@ func (c *CategoryUseCase) Update(ctx context.Context, request *model.UpdateCateg
 	if request.Slug != "" {
 		category.Slug = request.Slug
 	}
-	if request.ParentId != "" {
-		parentID, err := uuid.Parse(request.ParentId)
+	if request.ParentId != nil && *request.ParentId != "" {
+		parentID, err := uuid.Parse(*request.ParentId)
 		if err != nil {
 			c.Log.WithError(err).Warn("invalid parent category id")
 			return nil, fiber.ErrBadRequest

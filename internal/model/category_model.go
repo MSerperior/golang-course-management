@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 // Category
 
@@ -14,16 +16,16 @@ type CategoryResponse struct {
 }
 
 type CreateCategoryRequest struct {
-	Name     string `json:"name" validate:"required,max=100"`
-	Slug     string `json:"slug" validate:"required,max=100"`
-	ParentId string `json:"parent_id,omitempty" validate:"max=100,uuid"`
+	Name     string  `json:"name" validate:"required,max=100"`
+	Slug     string  `json:"slug" validate:"required,max=100"`
+	ParentId *string `json:"parent_id,omitempty" validate:"omitempty,max=100,uuid"`
 }
 
 type UpdateCategoryRequest struct {
-	ID       string `json:"-" validate:"required,max=100,uuid"`
-	Name     string `json:"name,omitempty" validate:"max=100"`
-	Slug     string `json:"slug,omitempty" validate:"max=100"`
-	ParentId string `json:"parent_id,omitempty" validate:"max=100,uuid"`
+	ID       string  `json:"-" validate:"required,max=100,uuid"`
+	Name     string  `json:"name,omitempty" validate:"max=100"`
+	Slug     string  `json:"slug,omitempty" validate:"max=100"`
+	ParentId *string `json:"parent_id,omitempty" validate:"omitempty,max=100,uuid"`
 }
 
 type GetCategoryRequest struct {
