@@ -1,0 +1,290 @@
+{
+  "info": {
+    "name": "Golang Course Management API",
+    "description": "Generated from internal/delivery/http/route/route.go",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    { "key": "base_protocol", "value": "http" },
+    { "key": "base_host", "value": "localhost" },
+    { "key": "base_port", "value": "3000" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"secret\",\n  \"name\": \"John Doe\"\n}" },
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/users",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "users" ]
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"secret\"\n}" },
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/users/_login",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "users", "_login" ]
+        }
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "DELETE",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/users",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "users" ]
+        }
+      }
+    },
+    {
+      "name": "Get Current User",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/users/_current",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "users", "_current" ]
+        }
+      }
+    },
+    {
+      "name": "Update Current User",
+      "request": {
+        "method": "PATCH",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"New Name\"\n}" },
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/users/_current",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "users", "_current" ]
+        }
+      }
+    },
+    {
+      "name": "Contacts - List",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "contacts" ] }
+      }
+    },
+    {
+      "name": "Contacts - Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane@example.com\"\n}" },
+        "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "contacts" ] }
+      }
+    },
+    {
+      "name": "Contacts - Get",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}" ],
+          "variable": [ { "key": "contactId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Contacts - Update",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"first_name\": \"Updated\"\n}" },
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}" ],
+          "variable": [ { "key": "contactId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Contacts - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}" ],
+          "variable": [ { "key": "contactId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Addresses - List By Contact",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}/addresses",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}", "addresses" ],
+          "variable": [ { "key": "contactId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Addresses - Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"street\": \"123 Main St\",\n  \"city\": \"City\",\n  \"postal_code\": \"12345\"\n}" },
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}/addresses",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}", "addresses" ],
+          "variable": [ { "key": "contactId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Addresses - Get",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}/addresses/{{addressId}}",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}", "addresses", "{{addressId}}" ],
+          "variable": [ { "key": "contactId", "value": "" }, { "key": "addressId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Addresses - Update",
+      "request": {
+        "method": "PUT",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"street\": \"456 New St\"\n}" },
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}/addresses/{{addressId}}",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}", "addresses", "{{addressId}}" ],
+          "variable": [ { "key": "contactId", "value": "" }, { "key": "addressId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Addresses - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [ { "key": "Authorization", "value": "{{token}}" } ],
+        "url": {
+          "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/contacts/{{contactId}}/addresses/{{addressId}}",
+          "protocol": "{{base_protocol}}",
+          "host": [ "{{base_host}}" ],
+          "port": "{{base_port}}",
+          "path": [ "api", "contacts", "{{contactId}}", "addresses", "{{addressId}}" ],
+          "variable": [ { "key": "contactId", "value": "" }, { "key": "addressId", "value": "" } ]
+        }
+      }
+    },
+    {
+      "name": "Categories - List",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "{{token}}" } ], "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/categories", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "categories" ] } }
+    },
+    {
+      "name": "Categories - Create",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Programming\"\n}" },
+        "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/categories", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "categories" ] }
+      }
+    },
+    {
+      "name": "Categories - Get",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "{{token}}" } ], "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/categories/{{categoryId}}", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "categories", "{{categoryId}}" ], "variable": [ { "key": "categoryId", "value": "" } ] } }
+    },
+    {
+      "name": "Courses - List",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "{{token}}" } ], "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/courses", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "courses" ] } }
+    },
+    {
+      "name": "Courses - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"title\": \"Go Basics\",\n  \"description\": \"Learn Go\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/courses", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "courses" ] } }
+    },
+    {
+      "name": "Sections - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"course_id\": \"\",\n  \"title\": \"Section Title\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/sections", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "sections" ] } }
+    },
+    {
+      "name": "Sections - Get",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "{{token}}" } ], "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/sections/{{sectionId}}", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "sections", "{{sectionId}}" ], "variable": [ { "key": "sectionId", "value": "" } ] } }
+    },
+    {
+      "name": "Lessons - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"section_id\": \"\",\n  \"title\": \"Lesson Title\",\n  \"content\": \"\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/lessons", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "lessons" ] } }
+    },
+    {
+      "name": "Lessons - Get",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "{{token}}" } ], "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/lessons/{{lessonId}}", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "lessons", "{{lessonId}}" ], "variable": [ { "key": "lessonId", "value": "" } ] } }
+    },
+    {
+      "name": "Enrollments - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"course_id\": \"\",\n  \"user_id\": \"\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/enrollments", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "enrollments" ] } }
+    },
+    {
+      "name": "Reviews - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"course_id\": \"\",\n  \"rating\": 5,\n  \"comment\": \"Great course\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/reviews", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "reviews" ] } }
+    },
+    {
+      "name": "Roles - List",
+      "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "{{token}}" } ], "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/roles", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "roles" ] } }
+    },
+    {
+      "name": "Transactions - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"amount\": 100,\n  \"currency\": \"USD\",\n  \"user_id\": \"\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/transactions", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "transactions" ] } }
+    },
+    {
+      "name": "UserRoles - Create",
+      "request": { "method": "POST", "header": [ { "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "{{token}}" } ], "body": { "mode": "raw", "raw": "{\n  \"user_id\": \"\",\n  \"role_id\": \"\"\n}" }, "url": { "raw": "{{base_protocol}}://{{base_host}}:{{base_port}}/api/user_roles", "protocol": "{{base_protocol}}", "host": [ "{{base_host}}" ], "port": "{{base_port}}", "path": [ "api", "user_roles" ] } }
+    }
+  ]
+}
